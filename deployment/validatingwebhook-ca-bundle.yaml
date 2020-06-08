@@ -1,0 +1,21 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validation-internal-loadbalancer-cfg
+  labels:
+    app: admission-internal-loadbalancer
+webhooks:
+  - name: internal-loadbalancer-only.gardener.cloud
+    clientConfig:
+      service:
+        name: admission-internal-loadbalancer-svc
+        namespace: default
+        path: "/validate"
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMyRENDQWNDZ0F3SUJBZ0lSQUlQNG9mUXZ5S3pnME8vTnhqdjNJeXd3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB4T1RFd016QXhOVEV3TlRkYUZ3MHlPVEV3TXpBeApOVEV3TlRkYU1CVXhFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBCkE0SUJEd0F3Z2dFS0FvSUJBUUN1aS9pcXVKVGdpY3diKzVmeXg1RnZkeG9xZjJKV2FhT3ZVbk1BZXRoaVMwVTkKM05aeUlsdSs0MHJwa1NaS01SbDREQm85VGJwNWJIUHh4QU1URmUvSDh4b0QveUNGOGhuRWkxYVFPM2lYczFCbwpGbmVSNXZWckZxSmtjbUJWQ1JYUVVlUVZwR2YzYUNSTU9WMkpjei9oS3k4cTZjTVQzQnNULzVabzV0Vk9Na1RmCkkzU0NhTHp0UWtJV2lQT1FEUVJBMDNUZ1VyWlFEKzRUMGJaOThkdDh1U1lpaDh4c3pyYk9vaFBkMC9wR25YdTQKeStXWWh6STFLdjNxQnc4Nml1OVgybm1FdmxNMkRURjQ2OW96dm0wMnhaWjY0bU1WU2tYZEdpTFk2UEl6MFRXVQpjUjhFZFdLU0NMcnE4a0dkNTd2M3MrVndPQ0hZenlVOG9lNEc0MTFIQWdNQkFBR2pJekFoTUE0R0ExVWREd0VCCi93UUVBd0lCcGpBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFCRlN1Z28KU1lRbno0MDg4SFJEYTZYbWFUbmloU3NYaTRQMHpzVzFmOGNDSCtwSGZBcmFjWkg5cWNTdGlqTldMMkRsdmZvdAovc2x6SkFCT1dTSE43bCs5LzgwRE9HTjE2OFhYMU9TZTNtTm0rQXVCTC9rUVlDOG8xQXJCVzBnQjdKL1h4U084ClBMR2NNeGxlLzd3SmkzcHVFNzQzU0txODhPV3UyZ1d6dnplOXdQWWdpUlVjN3NVeW14UzJud25Vckw2cWlQei8KN2pnci9GM0hRSy9kMHFuMUc0eDNPalh4d0tuRm85ditZTjM1TWJVNzJJVGNlR2swN0M1cnF4cWlNbk5QVU4yQQpmSENpVlc0UThZcC91QVJraEFzbTYxVEVMblJ4SGtlLzhSVTh4bllMVWYzMUtlL0pMUVdXVHp6QVFOTTIwQk5aClFIWlJtalNPREMyOWE4NWcKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["services"]
+    namespaceSelector: {}
+

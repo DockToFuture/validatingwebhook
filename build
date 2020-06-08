@@ -1,0 +1,10 @@
+#!/bin/bash
+
+export DOCKER_USER=docktofuture
+
+#dep ensure -v
+CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o admission-internal-loadbalancer
+docker build --no-cache -t ${DOCKER_USER}/admission-internal-loadbalancer:v1 .
+rm -rf admission-internal-loadbalancer
+
+docker push ${DOCKER_USER}/admission-internal-loadbalancer:v1

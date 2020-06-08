@@ -1,0 +1,21 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validation-internal-loadbalancer-cfg
+  labels:
+    app: admission-internal-loadbalancer
+webhooks:
+  - name: internal-loadbalancer-only.gardener.cloud
+    clientConfig:
+      service:
+        name: admission-internal-loadbalancer-svc
+        namespace: default
+        path: "/validate"
+      caBundle: ${CA_BUNDLE}
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["services"]
+    namespaceSelector: {}
+

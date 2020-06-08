@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-internal-app
+spec:
+  selector:
+    matchLabels:
+      app: hello-internal
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: hello-internal
+    spec:
+      containers:
+      - name: hello
+        image: "gcr.io/google-samples/hello-app:2.0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ilb-service
+  annotations:
+    cloud.google.com/load-balancer-type: "Internal"
+  labels:
+    app: hello-internal
+spec:
+  type: LoadBalancer
+  selector:
+    app: hello-internal
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-external-app
+spec:
+  selector:
+    matchLabels:
+      app: hello-external
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: hello-external
+    spec:
+      containers:
+      - name: hello
+        image: "gcr.io/google-samples/hello-app:2.0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-service
+  labels:
+    app: hello-external
+spec:
+  type: LoadBalancer
+  selector:
+    app: hello-external
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-internal-app-2
+spec:
+  selector:
+    matchLabels:
+      app: hello-internal-2
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: hello-internal-2
+    spec:
+      containers:
+      - name: hello
+        image: "gcr.io/google-samples/hello-app:2.0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ilb-service2
+  annotations:
+    networking.gke.io/load-balancer-type: "Internal"
+  labels:
+    app: hello-internal-2
+spec:
+  type: LoadBalancer
+  selector:
+    app: hello-internal-2
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
